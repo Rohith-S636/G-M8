@@ -49,7 +49,8 @@ Each classroom works independently with its own students, groups, deadlines, and
 
 ---
 
-## G-M8/
+## Folder view
+G-M8/
 │
 ├── client/                     # 🌐 Frontend (React)
 │   ├── public/
