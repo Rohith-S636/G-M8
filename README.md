@@ -49,3 +49,59 @@ Each classroom works independently with its own students, groups, deadlines, and
 
 ---
 
+## G-M8/
+│
+├── client/                     # 🌐 Frontend (React)
+│   ├── public/
+│   │   ├── index.html
+│   │   ├── favicon.ico
+│   │   └── logo.png
+│   │
+│   └── src/
+│       ├── assets/             # Images, icons, logos
+│       ├── components/         # Reusable UI components (Navbar, ChatBox, etc.)
+│       ├── pages/              # Full pages (Dashboard, Login, ClassroomView, etc.)
+│       ├── context/            # React Context (AuthContext, SocketContext)
+│       ├── hooks/              # Custom React hooks
+│       ├── services/           # API calls (Axios)
+│       ├── utils/              # Helper functions
+│       ├── App.js
+│       ├── index.js
+│       └── styles/             # CSS / Tailwind configs
+│
+├── server/                     # ⚙️ Backend (Node.js + Express)
+│   ├── config/
+│   │   ├── db.js               # MongoDB connection
+│   │   └── socket.js           # Socket.io setup (for real-time chat)
+│   │
+│   ├── controllers/            # Logic for each route
+│   │   ├── userController.js
+│   │   ├── groupController.js
+│   │   ├── classController.js
+│   │   └── chatController.js
+│   │
+│   ├── models/                 # MongoDB schemas
+│   │   ├── User.js
+│   │   ├── Class.js
+│   │   ├── Group.js
+│   │   └── Message.js
+│   │
+│   ├── routes/                 # All API endpoints
+│   │   ├── userRoutes.js
+│   │   ├── classRoutes.js
+│   │   ├── groupRoutes.js
+│   │   └── chatRoutes.js
+│   │
+│   ├── middleware/             # Auth & error handlers
+│   │   ├── authMiddleware.js
+│   │   └── errorMiddleware.js
+│   │
+│   ├── utils/                  # Token generation, validators
+│   ├── server.js               # Entry point for Express app
+│   └── package.json
+│
+├── README.md
+└──package.json                # Root for combined scripts
+ 
+
+
