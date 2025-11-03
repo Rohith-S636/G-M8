@@ -49,10 +49,8 @@ Each classroom works independently with its own students, groups, deadlines, and
 
 ---
 
-
-
-
-
+## 📂 Folder Structure
+```bash
 G-M8
 │
 ├── client/                     # 🌐 Frontend (React)
@@ -106,5 +104,8 @@ G-M8
 │
 ├── README.md
 └──package.json                # Root for combined scripts
+```
+
+---
 
 
