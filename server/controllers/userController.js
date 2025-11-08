@@ -11,7 +11,7 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new Error("Please add all fields.");
   }
 
-  if(!isTeacher && !srn){
+  if (!isTeacher && !srn) {
     res.status(400);
     throw new Error("SRN is required for a Student to register.");
   }
@@ -142,7 +142,16 @@ const updateUser = asyncHandler(async (req, res) => {
 });
 
 const getMe = asyncHandler(async (req, res) => {
-  res.json({ message: "Display User Data" });
+  const user = await User.findById(req.user._id).select(
+    "name email isTeacher srn"
+  );
+
+  if (!user) {
+    res.status(404);
+    throw new Error("User not found");
+  }
+
+  res.json(user);
 });
 
 const generateToken = (id) => {

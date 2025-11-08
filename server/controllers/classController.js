@@ -1,5 +1,6 @@
 const Class = require('../models/Class');
 const User = require('../models/User');
+const Group = require('../models/Group')
 
 const asyncHandler = fn => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next);
 
@@ -40,11 +41,33 @@ exports.getClass = asyncHandler(async (req, res) => {
     return res.status(404).json({ message: 'Class not found' });
   }
 
-  res.json(cls);
+  const groups = await Group.find({ class: cls._id }).populate('members', 'name email');
+
+  res.json({
+    classInfo: {
+      name: cls.name,
+      description: cls.description,
+      code: cls.code,
+      teacher: cls.teacher,
+    },
+    members: {
+      students: cls.students,
+    },
+    groups: groups.map((g) => ({
+      _id: g._id,
+      name: g.name,
+      members: g.members,
+    })),
+  });
 });
 
 exports.getAllForTeacher = asyncHandler(async (req, res) => {
   const classes = await Class.find({ teacher: req.user._id }).sort({ createdAt: -1 });
+  res.json(classes);
+});
+
+exports.getAllForStudent = asyncHandler(async (req, res) => {
+  const classes = await Class.find({ students: req.user._id }).sort({ createdAt: -1 });
   res.json(classes);
 });
 
