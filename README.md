@@ -107,11 +107,8 @@ G-M8
 ```
 
 ---
-Contributors
-| **Name** | **Work file** |
-|-----------|------------------|
-| Mitesh | [view work](Contributors/mitesh.md) |
-| Tahir | [view work](Contributors/tahir.md) |
-| Pavan kishor | [view work](Contributors/kishore.md) |
-| Rohith GS | [view work](Contributors/rohithh.md) |
+
+# Project members
+>1. Kurumeti Mitesh
+>2. Tahir
 
