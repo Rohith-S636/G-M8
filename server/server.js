@@ -17,11 +17,15 @@ app.use(cors()); //adding from mitesh
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use("/api/users", require("./routes/userRoutes"));
+const classRoutes = require("./routes/classRoutes");
 
 //addons from mitesh
 app.use("/api/classes", require("./routes/classRoutes"));
 app.use("/api/groups", require("./routes/groupRoutes"));
 app.use("/api/chat", require("./routes/chatRoutes"));
+app.use("/api/class",classRoutes);
+
+
 
 
 app.use(errorHandler);

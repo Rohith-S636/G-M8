@@ -4,10 +4,10 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
   FaUserCircle,
+  FaHome,
   FaChalkboardTeacher,
   FaUsers,
   FaComments,
-  FaHome,
   FaPlusCircle,
   FaEnvelope,
   FaIdCard,
@@ -109,18 +109,36 @@ const Home = () => {
   ];
 
   const menuItemsStudent = [
-    { name: "Home", icon: <FaHome />, component: <HomeTab /> },
+    {
+      name: "Home",
+      icon: <FaHome />,
+      component: (
+        <HomeTab
+          setActiveTab={setActiveTab}
+          setSelectedClassId={setSelectedClassId}
+        />
+      ),
+    },
     { name: "Join Class", icon: <HiUserAdd />, component: <JoinClass /> },
-    { name: "Create Group", icon: <FaUsers />, component: <CreateGroup /> },
-    { name: "Join Group", icon: <FaUsers />, component: <JoinGroup /> },
-    { name: "Chat", icon: <FaComments />, component: <Chat /> },
+    // { name: "Create Group", icon: <FaUsers />, component: <CreateGroup /> },
+    // { name: "Join Group", icon: <FaUsers />, component: <JoinGroup /> },
+    // { name: "Chat", icon: <FaComments />, component: <Chat /> },
+    {
+      name: "View Class",
+      icon: <FaChalkboardTeacher />,
+      component: <ViewClass selectedClassId={selectedClassId} />,
+    },
   ];
 
   const menu = user?.isTeacher ? menuItemsTeacher : menuItemsStudent;
 
-  const activeComponent = menu.find((m) => m.name === activeTab)?.component || (
-    <HomeTab />
-  );
+  const activeComponent =
+    menu.find((m) => m.name === activeTab)?.component || (
+      <HomeTab
+        setActiveTab={setActiveTab}
+        setSelectedClassId={setSelectedClassId}
+      />
+    );
 
   return (
     <div className="home-layout">
@@ -180,13 +198,10 @@ const Home = () => {
         <div className="playground">{activeComponent}</div>
       </div>
 
-      {/* === Profile Modal === */}
+      {/* Profile Modal */}
       {showProfile && (
         <>
-          <div
-            className="modal-overlay"
-            onClick={() => setShowProfile(false)}
-          />
+          <div className="modal-overlay" onClick={() => setShowProfile(false)} />
           <div className="profile-modal">
             <FaTimes
               className="close-icon"
@@ -217,13 +232,10 @@ const Home = () => {
         </>
       )}
 
-      {/* === Settings Modal === */}
+      {/* Settings Modal */}
       {showSettings && (
         <>
-          <div
-            className="modal-overlay"
-            onClick={() => setShowSettings(false)}
-          />
+          <div className="modal-overlay" onClick={() => setShowSettings(false)} />
           <div className="settings-modal">
             <FaTimes
               className="close-icon"

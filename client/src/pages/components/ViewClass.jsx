@@ -4,6 +4,7 @@ import {
   getClassById,
   removeStudentFromClass,
   fetchTeacherClasses,
+  fetchStudentClasses, // added
 } from "../../api";
 import { toast } from "react-toastify";
 import { FaTrash } from "react-icons/fa";
@@ -14,14 +15,19 @@ const ViewClass = ({ selectedClassId: propClassId }) => {
   const [loading, setLoading] = useState(false);
   const [selectedClassId, setSelectedClassId] = useState(propClassId || "");
   const [teacherClasses, setTeacherClasses] = useState([]);
+  const [studentClasses, setStudentClasses] = useState([]); // added
 
   // Fetch teacher's classes for dropdown
   useEffect(() => {
     const loadClasses = async () => {
-      if (!user?.isTeacher) return;
       try {
-        const data = await fetchTeacherClasses(token);
-        setTeacherClasses(data);
+        if (user?.isTeacher) {
+          const data = await fetchTeacherClasses(token);
+          setTeacherClasses(data);
+        } else {
+          const data = await fetchStudentClasses(token); // student classes
+          setStudentClasses(data);
+        }
       } catch (err) {
         toast.error(err.message);
       }
@@ -29,10 +35,10 @@ const ViewClass = ({ selectedClassId: propClassId }) => {
     loadClasses();
   }, [user, token]);
 
-  // Fetch selected class info
+  // Fetch class info
   const fetchClassData = async (id) => {
+    if (!id) return;
     try {
-      if (!id) return;
       setLoading(true);
       const data = await getClassById(token, id);
       setClassData(data);
@@ -58,7 +64,7 @@ const ViewClass = ({ selectedClassId: propClassId }) => {
     }
   };
 
-  // === UI starts here ===
+  // === Dropdown if no class selected ===
   if (!selectedClassId) {
     return (
       <div className="home-tab">
@@ -78,8 +84,23 @@ const ViewClass = ({ selectedClassId: propClassId }) => {
               ))}
             </select>
           </div>
+        ) : user ? (
+          <div className="dropdown-container">
+            <select
+              className="class-dropdown"
+              value={selectedClassId}
+              onChange={(e) => setSelectedClassId(e.target.value)}
+            >
+              <option value="">Select a class</option>
+              {studentClasses.map((cls) => (
+                <option key={cls._id} value={cls._id}>
+                  {cls.name} ({cls.code})
+                </option>
+              ))}
+            </select>
+          </div>
         ) : (
-          <p className="dim-text">You’re not a teacher. Join a class to view details.</p>
+          <p className="dim-text">Loading user info...</p>
         )}
       </div>
     );
@@ -92,21 +113,28 @@ const ViewClass = ({ selectedClassId: propClassId }) => {
 
   return (
     <div className="playground-tab view-class-tab">
-      {/* CLASS INFO SECTION */}
       <h2 className="class-heading-unique">CLASS INFO</h2>
       <div className="info-card">
-        <p><strong>Name:</strong> {classInfo.name}</p>
-        <p><strong>Description:</strong> {classInfo.description || "No description provided"}</p>
-        <p><strong>Code:</strong> {classInfo.code}</p>
+        <p>
+          <strong>Name:</strong> {classInfo.name}
+        </p>
+        <p>
+          <strong>Description:</strong>{" "}
+          {classInfo.description || "No description provided"}
+        </p>
+        <p>
+          <strong>Code:</strong> {classInfo.code}
+        </p>
       </div>
 
-      {/* MEMBERS SECTION */}
       <h2 className="class-heading-unique">MEMBERS</h2>
       <div className="info-card">
         {members.students?.length > 0 ? (
           members.students.map((student) => (
             <div key={student._id} className="member-item">
-              <span>{student.name} — <span className="dim-text">{student.email}</span></span>
+              <span>
+                {student.name} — <span className="dim-text">{student.email}</span>
+              </span>
               {user?.isTeacher && (
                 <FaTrash
                   className="delete-icon"
@@ -120,7 +148,6 @@ const ViewClass = ({ selectedClassId: propClassId }) => {
         )}
       </div>
 
-      {/* GROUPS SECTION */}
       <h2 className="class-heading-unique">GROUPS</h2>
       <div className="info-card">
         {groups?.length > 0 ? (

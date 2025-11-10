@@ -111,3 +111,39 @@ exports.removeStudent = asyncHandler(async (req, res) => {
 
   res.json({ message: 'Student removed' });
 });
+
+
+//stu joining func
+exports.joinClassByCode = async (req, res) => {
+  try {
+    const { code } = req.body;
+    const userId = req.user._id;
+
+    console.log("Join request received for code:", code, "by user:", userId);
+
+    if (!code) {
+      return res.status(400).json({ message: "Class code is required" });
+    }
+
+    const cls = await Class.findOne({ code });
+    if (!cls) {
+      return res.status(404).json({ message: "Invalid class code" });
+    }
+
+    // Prevent duplicate joins
+    if (cls.students.includes(userId)) {
+      return res.status(200).json({ message: "Already joined this class" });
+    }
+
+    cls.students.push(userId);
+    await cls.save();
+
+    res.status(200).json({
+      message: "Joined class successfully!",
+      class: cls,
+    });
+  } catch (err) {
+    console.error("Error in joinClassByCode:", err.message);
+    res.status(500).json({ message: "Failed to join class", error: err.message });
+  }
+};

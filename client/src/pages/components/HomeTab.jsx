@@ -16,7 +16,15 @@ const HomeTab = ({ setActiveTab, setSelectedClassId }) => {
       const data = user.isTeacher
         ? await fetchTeacherClasses(token)
         : await fetchStudentClasses(token);
-      setClasses(data);
+
+      const normalizedData = data.map((cls) => ({
+        _id: cls._id || cls.id,
+        name: cls.name || cls.title || "Unnamed Class",
+        code: cls.code || "No Code",
+        description: cls.description || "No description provided",
+      }));
+
+      setClasses(normalizedData);
     } catch (err) {
       toast.error(err.message);
     } finally {
@@ -37,17 +45,19 @@ const HomeTab = ({ setActiveTab, setSelectedClassId }) => {
     loadClasses();
   }, [user]);
 
+  if (!user) return <p className="center-text">Loading user info...</p>;
+
   return (
     <div className="home-tab">
-      {/* Greeting */}
       <div className="home-greeting">
-        <h1 className="gradient-text">Hi, {user?.name} 👋</h1>
+        <h1 className="gradient-text">Hi, {user.name} 👋</h1>
       </div>
 
-      {/* Classes Section */}
       <div className="home-content">
         <h2 className="class-heading-unique">
-          {user?.isTeacher ? "CLASSES YOU HAVE CREATED" : "CLASSES YOU ARE IN"}
+          {user.isTeacher
+            ? "Classes You Have Created"
+            : "Classes You Are Enrolled In"}
         </h2>
 
         {loading ? (
@@ -56,14 +66,18 @@ const HomeTab = ({ setActiveTab, setSelectedClassId }) => {
           </div>
         ) : classes.length === 0 ? (
           <div className="center-text">
-            <p className="no-classes">No classes found.</p>
+            <p className="no-classes">
+              {user.isTeacher
+                ? "You haven't created any classes yet."
+                : "You are not enrolled in any classes yet."}
+            </p>
           </div>
         ) : (
           <div className="class-grid">
             {classes.map((cls) => (
               <div
                 key={cls._id}
-                className="class-card"
+                className={`class-card ${user.isTeacher ? "teacher-card" : "student-card"}`}
                 onClick={() => {
                   setSelectedClassId(cls._id);
                   setActiveTab("View Class");
@@ -71,20 +85,20 @@ const HomeTab = ({ setActiveTab, setSelectedClassId }) => {
               >
                 <div className="class-header">
                   <span className="class-name">{cls.name}</span>
-                  <div className="class-code-container">
-                    <span className="class-code-text">{cls.code}</span>
-                    <FaRegCopy
-                      className="copy-icon"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleCopyCode(cls.code);
-                      }}
-                    />
-                  </div>
+                  {user.isTeacher && (
+                    <div className="class-code-container">
+                      <span className="class-code-text">{cls.code}</span>
+                      <FaRegCopy
+                        className="copy-icon"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleCopyCode(cls.code);
+                        }}
+                      />
+                    </div>
+                  )}
                 </div>
-                <p className="class-desc">
-                  {cls.description || "No description provided"}
-                </p>
+                <p className="class-desc">{cls.description}</p>
               </div>
             ))}
           </div>
