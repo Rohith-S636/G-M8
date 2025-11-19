@@ -1,4 +1,4 @@
-# 🐸G-M8
+# 🐸G-M8(GROUPMATE)
 
 A next-generation web platform that helps **teachers and students collaborate efficiently** through organized classrooms, student groups, real-time chats, and project submissions — all in one place.  
 Designed for seamless academic teamwork and project management.
@@ -7,7 +7,7 @@ Designed for seamless academic teamwork and project management.
 
 ## 📌 Overview
 
-**ClassMate** is a full-stack web application that makes **classroom group management and collaboration** effortless.
+**GroupMate** is a full-stack web application that makes **classroom group management and collaboration** effortless.
 
 Teachers can create classrooms, manage students, assign projects, and monitor progress — while students can form groups, communicate, and manage submissions all under one platform.
 
@@ -110,5 +110,7 @@ G-M8
 
 # Project members
 >1. Kurumeti Mitesh
->2. Tahir
+>2. Mohammed Tahir Siddique
+>3. Pavan Kishor M
+>4. Rohith G S
 
